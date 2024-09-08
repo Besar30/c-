@@ -1,0 +1,79 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Xml.Linq;
+using static c_fundamentalconsoleapp.Program;
+namespace c_fundamentalconsoleapp
+{
+    internal class Program
+    {
+       
+        static void Main(string[] args)
+        {
+            while (true) {
+                Console.Write(">>");
+                var command= Console.ReadLine();
+                int index_query = command.IndexOf(' ');
+                var query=command.Substring(0, index_query).ToLower();
+                var path=command.Substring(index_query).Trim();
+                
+                if (query == "list")
+                {
+                    //foreach(var it in Directory.GetDirectories(path))
+                    //{
+                    //    Console.WriteLine(it);
+                    //}
+                    //foreach(var it in Directory.GetFiles(path))
+                    //{
+                    //    Console.WriteLine(it);
+                    //}
+                    foreach (var it in Directory.GetDirectories(path,"*bin*").Concat(Directory.GetFiles(path)))
+                    {
+                        Console.WriteLine(it);
+                    }
+                }
+                else if (query == "info")
+                {
+                    if (Directory.Exists(path))
+                    {
+                        var dirinf=new DirectoryInfo(path);
+                        Console.WriteLine("Type : Dirictory");
+                        Console.WriteLine($"name : {dirinf.FullName}");
+                        Console.WriteLine($"create at : {dirinf.CreationTime}");
+                        Console.WriteLine($"last modifier at : {dirinf.LastWriteTime}");
+                    }
+                    else if (File.Exists(path)) {
+                        var fileinf = new DirectoryInfo(path);
+                        Console.WriteLine("Type : File");
+                        Console.WriteLine($"name : {fileinf.FullName}");
+                        Console.WriteLine($"create at : {fileinf.CreationTime}");
+                        Console.WriteLine($"last modifier at : {fileinf.LastWriteTime}");
+                    }
+                }
+                else if(query == "mkdir")
+                {
+                    //Directory.CreateDirectory(path);
+                    File.Create(path);
+                }
+                else if(query == "remove"){
+                    if (Directory.Exists(path))
+                    {
+                        //if his empty
+                        Directory.Delete(path);
+                        //if his not empty
+                        //Directory.Delete(path,true);
+                    }
+                    else if (File.Exists(path)) { 
+                        File.Delete(path);
+                    }
+                }
+                else if(query == "print"){
+                    if (File.Exists(path)) { 
+                        Console.WriteLine(File.ReadAllText(path));
+                    }
+                }
+                else if (quer
