@@ -1,0 +1,45 @@
+using aaa;
+using train;
+_context context = new _context();
+
+var s = context.book
+    .Join(
+        context.authers,
+        book => book.autherid,
+        auther => auther.id,
+        (book, auther) => new
+        {
+            bookid = book.id,
+            book_name = book.name,
+            auther_name = auther.name,
+            national_id = auther.nationalid
+        }
+    )
+    .GroupJoin(
+        context.nationals,
+        b => b.national_id,
+        n => n.id,
+        (b, nationals) => new
+        {
+            b.bookid,
+            b.book_name,
+            b.auther_name,
+            national = nationals.FirstOrDefault()
+        }
+    )
+    .Select(
+    b=> new
+    {
+        b.bookid,
+        b.book_name,
+        b.auther_name,
+        nationality=b.national!=null?b.national.name:"NO nationality",
+        id_nationality=b.national!=null?b.national.id:(int?)null
+
+    }
+    );
+
+foreach (var item in s)
+{
+    Console.WriteLine($"id book = {item.bookid} , book name = {item.book_name} , author = {item.auther_name} , nationality = {item.nationality}, id_national= {item.id_nationality}");
+}
