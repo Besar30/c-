@@ -1,0 +1,20 @@
+services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}
+).AddJwtBearer(o =>
+{
+    o.SaveToken = true;
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("mBXw2Ai11hN1dGOGv8ybrTPmfBoIGvYv")),
+        ValidIssuer = "SurveyBasketApp",
+        ValidAudience = "SurveyBasketApp user"
+    };
+
+});
